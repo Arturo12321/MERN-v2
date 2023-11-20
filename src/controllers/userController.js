@@ -59,7 +59,37 @@ export const register = async  (req, res) => {
     }
 };
 
-export const login = (req, res) => {};
+export const login = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        const userFound = await User.findOne({ $or: [{ email }, { username }] });
+        
+        if (!userFound) {
+            return res.status(400).json({ message: "User not found" });
+        }
+
+        const isMatch = await bcrypt.compare(password, userFound.password);
+        
+        if (!isMatch) return res.status(400).json({ message: "Invalid password"});
+
+        const token = await createdAccessToken({ id: userFound._id, });
+
+        res.cookie('token', token);
+
+        res.json({
+            id: userFound._id, 
+            username: userFound.username, 
+            email: userFound.email,
+            createdAt: userFound.createdAt.toLocaleString(),
+            updatedAt: userFound.updatedAt.toLocaleString(),
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
 
 export const getUsers = (req, res) => {};
 
