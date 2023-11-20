@@ -3,7 +3,8 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { uploadFile } from "../libs/uploadFile.js";
-
+import { createdAccessToken } from "../libs/jsonWebToken.js";
+import { TOKEN_SECRET } from "../config/config-secret.js";
 
 export const register = async  (req, res) => {
     try {
@@ -20,7 +21,7 @@ export const register = async  (req, res) => {
 
         const { downloadURL } = await uploadFile(image[0]);
 
-        const  passwordHash = await bcrypt.hash(password, 10)
+        const  passwordHash = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             username,
@@ -36,18 +37,25 @@ export const register = async  (req, res) => {
             password: passwordHash,
             image: downloadURL,
             role
-    });
+        });
 
-     const userSaved = await newUser.save();
+        const userSaved = await newUser.save();
 
-    return res.status(200).json({
-        id: userSaved._id, 
-        username: userSaved.username, 
-        email: userSaved.email
-    });
+        const token = await createdAccessToken({ id: userSaved._id, });
+
+        res.cookie('token', token);
+
+        res.json({
+            id: userSaved._id, 
+            username: userSaved.username, 
+            email: userSaved.email,
+            createdAt: userSaved.createdAt.toLocaleString(),
+            updatedAt: userSaved.updatedAt.toLocaleString(),
+        });
+
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error en el servidor' });
+        return res.status(500).json({ message: 'Error en el servidor al querer crear un User' });
     }
 };
 
