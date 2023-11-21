@@ -102,8 +102,15 @@ export const logout = (req, res) => {
     return res.sendStatus(200);
 };
 
-export const getUsers = (req, res) => {
-    res.json({ message: 'Acceso permitido para administradores.' });
+export const getUsers = async (req, res) => {
+    
+    try {
+        const usersFound = await User.find().lean().exec()
+        res.json(usersFound);
+        
+    } catch (error) {
+        res.status(500).json({ error: "No se pudieron obtener los usuarios, disculpa." });
+    }
 };
 
 export const profile = async (req, res) => {
@@ -111,7 +118,7 @@ export const profile = async (req, res) => {
     const userFound = await User.findById(req.user.id);
 
     if (!userFound) return res.status(400).json({ message: " Username not found"});
-    
+    console.log(userFound)
     res.json({
         id: userFound.id,
         username: userFound.username,
@@ -125,12 +132,50 @@ export const profile = async (req, res) => {
         address: userFound.address,
         cell_phone: userFound.cell_phone,
         role: userFound.role,
+        image: userFound.image,
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,
     });
 };
 
-export const updateProfile = (req, res) => {};
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.params.id; 
+        const updatedData = req.body;
 
-export const deleteUser = (req, res) => {};
+        if (req.files && req.files.image) {
+            const { downloadURL } = await uploadFile(req.files.image[0]);
+            updatedData.image = downloadURL;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        return res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
+export const deleteUser = async (req, res) => {
+
+    try {
+        const userId = req.params.id;
+
+        const deletedUser = await User.findOneAndDelete({ _id: userId });
+
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        return res.status(200).json({ message: 'Usuario eliminado con éxito' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor, deleteUser' });
+    }
+};
 

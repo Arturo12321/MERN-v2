@@ -20,6 +20,6 @@ export const checkUserRole = (req, res, next) => {
         next();
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error en el servidor' });
+        return res.status(500).json({ message: 'Error en el servidor: checkUserRole' });
     }
 };

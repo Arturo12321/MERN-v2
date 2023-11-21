@@ -12,13 +12,13 @@ router.post('/login', login)
 
 router.post('/logout', logout)
 
-router.get('/profile',authRequired,profile)
-
 router.get('/users',authRequired, checkUserRole, getUsers);
 
-router.put('/profile/:id', updateProfile)
+router.get('/profile',authRequired,profile)
 
-router.delete('/user/:id', deleteUser)
+router.put('/profile/:id',authRequired,upload.fields([{ name: 'image', maxCount: 1 }]), updateProfile)
+
+router.delete('/user/:id',authRequired,checkUserRole, deleteUser)
 
 export default router;
 
