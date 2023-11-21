@@ -41,7 +41,10 @@ export const register = async  (req, res) => {
 
         const userSaved = await newUser.save();
 
-        const token = await createdAccessToken({ id: userSaved._id, });
+        const token = await createdAccessToken({ id: userSaved._id,
+            username: userSaved.username,
+            email: userSaved.email,
+            role: userSaved.role });
 
         res.cookie('token', token);
 
@@ -73,7 +76,7 @@ export const login = async (req, res) => {
         
         if (!isMatch) return res.status(400).json({ message: "Invalid password"});
 
-        const token = await createdAccessToken({ id: userFound._id, });
+        const token = await createdAccessToken({ id: userFound._id, email: userFound.email, user: userFound.username,role: userFound.role});
 
         res.cookie('token', token);
 
@@ -81,6 +84,7 @@ export const login = async (req, res) => {
             id: userFound._id, 
             username: userFound.username, 
             email: userFound.email,
+            role: userFound.role,
             createdAt: userFound.createdAt.toLocaleString(),
             updatedAt: userFound.updatedAt.toLocaleString(),
         });
@@ -91,9 +95,40 @@ export const login = async (req, res) => {
     }
 };
 
-export const getUsers = (req, res) => {};
+export const logout = (req, res) => {
+    res.cookie('token', "", {
+        expires: new Date(0)
+    });
+    return res.sendStatus(200);
+};
 
-export const getProfile = (req, res) => {};
+export const getUsers = (req, res) => {
+    res.json({ message: 'Acceso permitido para administradores.' });
+};
+
+export const profile = async (req, res) => {
+
+    const userFound = await User.findById(req.user.id);
+
+    if (!userFound) return res.status(400).json({ message: " Username not found"});
+    
+    res.json({
+        id: userFound.id,
+        username: userFound.username,
+        firstname: userFound.firstname,
+        lastname: userFound.lastname,
+        dni: userFound.dni, 
+        birth_date: userFound.birth_date, 
+        company_name: userFound.company_name, 
+        ruc: userFound.ruc,
+        email: userFound.email,
+        address: userFound.address,
+        cell_phone: userFound.cell_phone,
+        role: userFound.role,
+        createdAt: userFound.createdAt,
+        updatedAt: userFound.updatedAt,
+    });
+};
 
 export const updateProfile = (req, res) => {};
 

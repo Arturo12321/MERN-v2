@@ -7,24 +7,24 @@ export async function uploadFile (file) {
     .resize({width:200, height:200, fit: 'cover'})
     .toBuffer()
 
-const fileRef = ref(storage, `files/${file.originalname} ${Date.now()}`)
+    const fileRef = ref(storage, `files/users/${file.originalname} ${Date.now()}`)
 
-const fileMetadata = {
-    contentType: file.mimetype
-}
+    const fileMetadata = {
+        contentType: file.mimetype
+    }
 //Ojo con es fileUploadPromise, se puede hacer mas pequeño.
 
-const fileUploadPromise = uploadBytesResumable(
-    fileRef,
-    fileBuffer,
-    fileMetadata
-)
-await fileUploadPromise;
+    const fileUploadPromise = uploadBytesResumable(
+        fileRef,
+        fileBuffer,
+        fileMetadata
+    )
+    await fileUploadPromise;
 
-const fileDownloadUrl = await getDownloadURL(fileRef);
+    const fileDownloadUrl = await getDownloadURL(fileRef);
 
-console.log("Carga de archivo exitosa. Referencia de archivo:", fileRef);
+    console.log("Carga de archivo exitosa. Referencia de archivo:", fileRef);
 
-return { ref: fileRef, downloadURL: fileDownloadUrl };
+    return { ref: fileRef, downloadURL: fileDownloadUrl };
 
 }
