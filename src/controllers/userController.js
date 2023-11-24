@@ -1,10 +1,8 @@
-/* controlador */
-
-import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import User from "../models/userModel.js";
 import { uploadFile } from "../libs/uploadFile.js";
-import { createdAccessToken } from "../libs/jsonWebToken.js";
 import { TOKEN_SECRET } from "../config/config-secret.js";
+import { createdAccessToken } from "../libs/jsonWebToken.js";
 
 export const register = async  (req, res) => {
     try {
@@ -61,7 +59,6 @@ export const register = async  (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor al querer crear un User' });
     }
 };
-
 export const login = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -94,14 +91,12 @@ export const login = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor' });
     }
 };
-
 export const logout = (req, res) => {
     res.cookie('token', "", {
         expires: new Date(0)
     });
     return res.sendStatus(200);
 };
-
 export const getUsers = async (req, res) => {
     
     try {
@@ -112,7 +107,6 @@ export const getUsers = async (req, res) => {
         res.status(500).json({ error: "No se pudieron obtener los usuarios, disculpa." });
     }
 };
-
 export const profile = async (req, res) => {
 
     const userFound = await User.findById(req.user.id);
@@ -137,7 +131,6 @@ export const profile = async (req, res) => {
         updatedAt: userFound.updatedAt,
     });
 };
-
 export const updateProfile = async (req, res) => {
     try {
         const userId = req.params.id; 
@@ -160,7 +153,6 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor' });
     }
 };
-
 export const deleteUser = async (req, res) => {
 
     try {
@@ -178,4 +170,3 @@ export const deleteUser = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor, deleteUser' });
     }
 };
-
