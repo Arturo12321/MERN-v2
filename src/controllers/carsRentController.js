@@ -6,7 +6,7 @@ export const getCars = async(req, res) => {
 
 };
 
-export const getMycars = async(req, res) => {
+export const getMyCars = async(req, res) => {
 
 };
 
