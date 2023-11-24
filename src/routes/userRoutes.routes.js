@@ -1,9 +1,9 @@
 /* rutas */
 import { Router } from "express";
-import { login, logout, register, profile, getUsers, updateProfile, deleteUser } from "../controllers/userController.js";
 import { upload } from "../config/multer.js";
 import { authRequired} from "../middlewares/validateToken.js";
 import { checkUserRole } from "../middlewares/checkUserRole.js";
+import { login, logout, register, profile, getUsers, updateProfile, deleteUser } from "../controllers/userController.js";
 
 const router = Router();
 

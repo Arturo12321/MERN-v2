@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
-import { uploadFile } from "../libs/uploadFile.js";
+import { uploadUserFile } from "../libs/uploadUserFile.js";
 import { TOKEN_SECRET } from "../config/config-secret.js";
 import { createdAccessToken } from "../libs/jsonWebToken.js";
 
@@ -17,7 +17,7 @@ export const register = async  (req, res) => {
             return res.status(400).json({ message: 'Debes proporcionar una contraseña' });
         }
 
-        const { downloadURL } = await uploadFile(image[0]);
+        const { downloadURL } = await uploadUserFile(image[0]);
 
         const  passwordHash = await bcrypt.hash(password, 10);
 
@@ -137,7 +137,7 @@ export const updateProfile = async (req, res) => {
         const updatedData = req.body;
 
         if (req.files && req.files.image) {
-            const { downloadURL } = await uploadFile(req.files.image[0]);
+            const { downloadURL } = await uploadUserFile(req.files.image[0]);
             updatedData.image = downloadURL;
         }
 

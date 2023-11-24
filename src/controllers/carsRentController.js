@@ -1,3 +1,7 @@
+import CarRent from "../models/carRentModel.js";
+import { uploadCarRentFile } from "../libs/uploadCarRentFile.js";
+
+
 export const getCars = async(req, res) => {
 
 };
@@ -9,7 +13,6 @@ export const getMycars = async(req, res) => {
 export const getCar = async(req, res) => {
 
 };
-
 
 export const createCar = async(req, res) => {
 

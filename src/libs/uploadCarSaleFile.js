@@ -2,12 +2,12 @@ import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 import { storage } from '../config/firebase.js'
 import sharp from 'sharp'
 
-export async function uploadFile (file) {
+export async function uploadCarSaleFile (file) {
     let fileBuffer = await sharp(file.buffer)
     .resize({width:200, height:200, fit: 'cover'})
     .toBuffer()
 
-    const fileRef = ref(storage, `files/users/${file.originalname} ${Date.now()}`)
+    const fileRef = ref(storage, `files/carsSale/${file.originalname} ${Date.now()}`)
 
     const fileMetadata = {
         contentType: file.mimetype
@@ -27,4 +27,4 @@ export async function uploadFile (file) {
 
     return { ref: fileRef, downloadURL: fileDownloadUrl };
 
-}
+};

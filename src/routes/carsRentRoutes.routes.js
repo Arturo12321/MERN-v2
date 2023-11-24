@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { upload } from "../config/multer.js";
 import { authRequired } from "../middlewares/validateToken";
+import { getCars, getMyCars, getCar, createCar, updateCar, deleteCar} from "../controllers/carsRentController.js";
 
 const router = Router();
 
