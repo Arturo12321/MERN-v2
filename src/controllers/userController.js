@@ -10,7 +10,7 @@ export const register = async  (req, res) => {
         const image = req.files.image;
 
         if (!image || image.length === 0) {
-            return res.status(400).json({ message: 'Debes enviar una imagen' });
+            return res.status(400).json({ message: 'You must send an image' });
         }
 
         if (!password) {

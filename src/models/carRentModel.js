@@ -10,7 +10,7 @@ const carRentSchema = new mongoose.Schema({
         required: true
     },
     year: {
-        type: Date  ,
+        type: Date,
         required: true
     },
     image: {
