@@ -11,9 +11,9 @@ router.get('/mycars/sale/getmycars', authRequired, getMyCars);
 
 router.get('/car/sale/getcar/:id', authRequired, getCar);
 
-router.post('/car/sale/createCar', authRequired, createCar);
+router.post('/car/sale/createCar', authRequired, upload.fields([{name:'image', maxCount: 1}]), createCar);
 
-router.put('/car/sale/updatecar/:id', authRequired, updateCar);
+router.put('/car/sale/updatecar/:id', authRequired, upload.fields([{name:'image', maxCount: 1}]), updateCar);
 
 router.delete('/car/sale/deleteCar/:id', authRequired, deleteCar);
 

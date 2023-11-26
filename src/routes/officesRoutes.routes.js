@@ -11,9 +11,9 @@ router.get('/myoffices/getmyoffices', authRequired, getMyOffices);
 
 router.get('/office/getoffice/:id', authRequired, getOffice);
 
-router.post('/office/createoffice', authRequired, createOffice);
+router.post('/office/createoffice', authRequired, upload.fields([{name:'image', maxCount: 1}]), createOffice);
 
-router.put('/office/updateoffice/:id', authRequired, updateOffice);
+router.put('/office/updateoffice/:id', authRequired, upload.fields([{name:'image', maxCount: 1}]), updateOffice);
 
 router.delete('/office/deleteoffice/:id', authRequired, deleteOffice);
 

@@ -11,9 +11,9 @@ router.get('/mycars/rent/getmycars', authRequired, getMyCars);
 
 router.get('/car/rent/getcar/:id', authRequired, getCar);
 
-router.post('/car/rent/createcar', authRequired, createCar);
+router.post('/car/rent/createcar', authRequired, upload.fields([{name:'image', maxCount: 1}]), createCar);
 
-router.put('/car/rent/updatecar/:id', authRequired, updateCar);
+router.put('/car/rent/updatecar/:id', authRequired, update.fields([{name: 'image', maxCount: 1}]), updateCar);
 
 router.delete('/cars/rent/deletecar/:id', authRequired, deleteCar);
 
