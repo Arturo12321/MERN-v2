@@ -21,30 +21,26 @@ export const register = async  (req, res) => {
         });
 
         if (userFound) {
-            let errors=[];
             if (userFound.username === username) {
-                errors.push("The username is already in use");
+                return res.status(400).json(["The username is already in use"]);
             }
             if (userFound.dni === dni) {
-                errors.push("The DNI is already in use");
+                return res.status(400).json(["The DNI is already in use"]);
             }
             if (userFound.company_name === company_name) {
-                errors.push("The company name is already in use");
+                return res.status(400).json(["The company name is already in use"]);
             }
             if (userFound.ruc === ruc) {
-                errors.push("The RUC is already in use");
+                return res.status(400).json(["The RUC is already in use"]);
             }
             if (userFound.email === email) {
-                errors.push("The email is already in use");
+                return res.status(400).json(["The email is already in use"]);
             }
             if (userFound.cell_phone === cell_phone) {
-                errors.push("The cell phone number is already in use");
-            }
-            
-            if (errors.length > 0) {
-                return res.status(400).json(errors);
+                return res.status(400).json(["The cell phone number is already in use"]);
             }
         }
+        
         if (!image || image.length === 0) {
             return res.status(400).json({ message: 'You must send an image' });
         }
@@ -102,12 +98,12 @@ export const login = async (req, res) => {
         const userFound = await User.findOne({ $or: [{ email }, { username }] });
         
         if (!userFound) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(400).json(["Email our Username not found"] );
         }
 
         const isMatch = await bcrypt.compare(password, userFound.password);
         
-        if (!isMatch) return res.status(400).json({ message: "Invalid password"});
+        if (!isMatch) return res.status(400).json(["Invalid password"]);
 
         const token = await createdAccessToken({ id: userFound._id, email: userFound.email, user: userFound.username,role: userFound.role});
 
@@ -119,7 +115,7 @@ export const login = async (req, res) => {
             email: userFound.email,
             role: userFound.role,
             createdAt: userFound.createdAt.toLocaleString(),
-            updatedAt: userFound.updatedAt.toLocaleString(),
+            updatedAt: userFound.updatedAt.toLocaleString(),    
         });
 
     } catch (error) {
