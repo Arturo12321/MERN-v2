@@ -9,6 +9,42 @@ export const register = async  (req, res) => {
         const { username, firstname, lastname, dni, birth_date, company_name, ruc, email, address, cell_phone, password, role } = req.body;
         const image = req.files.image;
 
+        const userFound = await User.findOne({
+            $or:[
+                {username},
+                {dni},
+                {company_name},
+                {ruc},
+                {email},
+                {cell_phone}
+            ]
+        });
+
+        if (userFound) {
+            let errors=[];
+            if (userFound.username === username) {
+                errors.push("The username is already in use");
+            }
+            if (userFound.dni === dni) {
+                errors.push("The DNI is already in use");
+            }
+            if (userFound.company_name === company_name) {
+                errors.push("The company name is already in use");
+            }
+            if (userFound.ruc === ruc) {
+                errors.push("The RUC is already in use");
+            }
+            if (userFound.email === email) {
+                errors.push("The email is already in use");
+            }
+            if (userFound.cell_phone === cell_phone) {
+                errors.push("The cell phone number is already in use");
+            }
+            
+            if (errors.length > 0) {
+                return res.status(400).json(errors);
+            }
+        }
         if (!image || image.length === 0) {
             return res.status(400).json({ message: 'You must send an image' });
         }
