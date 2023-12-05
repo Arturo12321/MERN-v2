@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import { uploadUserFile } from "../libs/uploadUserFile.js";
 import { TOKEN_SECRET } from "../config/config-secret.js";
@@ -201,4 +202,37 @@ export const deleteUser = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Error en el servidor, deleteUser' });
     }
+};
+
+
+export const verifyToken = async(req, res) => {
+    const {token} = req.cookies
+
+    if (!token) return res.status(401).json({ message: "Unauthorized "});
+
+    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+
+        if (err) return res.status(401).json({ message: "Unauthorized "});
+        
+        const userFound = await User.findById(user.id)
+        if (!userFound) return res.status(401).json({ message: "Unauthorized "});
+        
+        return res.json({
+            id: userFound.id,
+            username: userFound.username,
+            firstname: userFound.firstname,
+            lastname: userFound.lastname,
+            dni: userFound.dni, 
+            birth_date: userFound.birth_date, 
+            company_name: userFound.company_name, 
+            ruc: userFound.ruc,
+            email: userFound.email,
+            address: userFound.address,
+            cell_phone: userFound.cell_phone,
+            role: userFound.role,
+            image: userFound.image,
+            createdAt: userFound.createdAt,
+            updatedAt: userFound.updatedAt,
+        });
+    });
 };
