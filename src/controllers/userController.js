@@ -142,6 +142,33 @@ export const getUsers = async (req, res) => {
 };
 export const profile = async (req, res) => {
 
+    const userFound = await User.findById(req.params.id).exec();;
+
+    if (!userFound) return res.status(400).json({ message: " Username not found"});
+    console.log(userFound)
+    res.json({
+        id: userFound.id,
+        username: userFound.username,
+        firstname: userFound.firstname,
+        lastname: userFound.lastname,
+        dni: userFound.dni, 
+        birth_date: userFound.birth_date, 
+        company_name: userFound.company_name, 
+        ruc: userFound.ruc,
+        email: userFound.email,
+        address: userFound.address,
+        cell_phone: userFound.cell_phone,
+        role: userFound.role,
+        // password: userFound.password,
+        image: userFound.image,
+        createdAt: userFound.createdAt,
+        updatedAt: userFound.updatedAt,
+    });
+};
+
+
+export const myprofile = async (req, res) => {
+
     const userFound = await User.findById(req.user.id);
 
     if (!userFound) return res.status(400).json({ message: " Username not found"});
@@ -159,6 +186,7 @@ export const profile = async (req, res) => {
         address: userFound.address,
         cell_phone: userFound.cell_phone,
         role: userFound.role,
+        // password: userFound.password,
         image: userFound.image,
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,

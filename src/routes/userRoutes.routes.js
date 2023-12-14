@@ -5,7 +5,7 @@ import { authRequired} from "../middlewares/validateToken.js";
 import { checkUserRole } from "../middlewares/checkUserRole.js";
 import { validateSchema } from "../middlewares/validatorMiddleware.js";
 import { registerSchema, loginSchema } from "../schemas/userSchema.js";
-import { login, logout, register, profile, getUsers, updateProfile, deleteUser, verifyToken } from "../controllers/userController.js";
+import { login, logout, register, profile, myprofile, getUsers, updateProfile, deleteUser, verifyToken } from "../controllers/userController.js";
 
 const router = Router();
 
@@ -17,7 +17,9 @@ router.post('/logout', logout);
 
 router.get('/users',authRequired, checkUserRole, getUsers); 
 
-router.get('/profile',authRequired,profile);
+router.get('/profile/:id',authRequired,profile);
+
+router.get('/myprofile',authRequired,myprofile);
 
 router.put('/profile/:id',authRequired,upload.fields([{ name: 'image', maxCount: 1 }]), updateProfile);
 
