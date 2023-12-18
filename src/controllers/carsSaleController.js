@@ -16,7 +16,7 @@ export const getCars = async(req, res) => {
 
 export const getMyCars = async(req, res) => {
     try {
-        const myCarsSale = await CarSale.find()
+        const myCarsSale = await CarSale.find({user: req.user.id})
         .populate('user')
         .exec();
         res.json(myCarsSale);

@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/offices/getoffices', authRequired, getOffices);
 
-router.get('/myoffices/getmyoffices', authRequired, getMyOffices);
+router.get('/offices/getmyoffices', authRequired, getMyOffices);
 
 router.get('/office/getoffice/:id', authRequired, getOffice);
 

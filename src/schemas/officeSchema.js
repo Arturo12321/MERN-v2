@@ -13,29 +13,17 @@ export const createOfficeSchema = z.object({
 
     address: z.string({
         required_error: "Address is required"
-    })
-    .min(2, {
-        message: "Address must be at least 2 characters"
-    })
-    .max(50, {
-        message: "Address must be at most 50 characters"
     }),
 
     city: z.string({
         required_error: "City is required"
-    })
-    .min(2, {
-        message: "City must be at least 2 characters"
-    })
-    .max(50, {
-        message: "City must be at most 50 characters"
     }),
 
     country: z.string({
         required_error: "Country is required"
     }),
 
-    phone: z.number({
+    phone: z.string({
         required_error: "Price is required"
     }),
 
@@ -46,11 +34,11 @@ export const createOfficeSchema = z.object({
         message: "Email is Invalid"
     }),
 
-    latitude: z.number({
+    latitude: z.string({
         required_error: "Latitude is required"
     }),
 
-    longitude: z.number({
+    longitude: z.string({
         required_error: "Longitude is required"
     })
 });

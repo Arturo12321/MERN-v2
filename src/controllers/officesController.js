@@ -15,7 +15,7 @@ export const getOffices = async(req, res) => {
 
 export const getMyOffices = async(req, res) => {
     try {
-        const myOffices = await Office.find({user: res.user.id})
+        const myOffices = await Office.find({user: req.user.id})
         .populate('user')
         .exec();
         res.json(myOffices)
